@@ -46,7 +46,7 @@
 	<script>
 	
 	var video = document.getElementById("video");
-	var constraints = { facingMode: { exact: "environment" }}; //{ facingMode: { exact: "environment" }} 
+	var constraints = {video: { facingMode: { exact: "environment" }}};
 	
 	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
