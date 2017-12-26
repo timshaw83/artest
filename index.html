@@ -19,9 +19,9 @@
 	
 	#renderCanvas {
 		position: absolute;
-		z-index: 2;
-		/*left: 0;
-		top: 0;*/
+		z-index: 999;
+		left: 0;
+		top: 0;
 		width: 100%;
 		height: 100%;
 		touch-action: none;
@@ -30,8 +30,8 @@
 	#video {
 		position: absolute;
 		z-index: 1;
-		/*left: 0;
-		top: 0;*/
+		left: 0;
+		top: 0;
 		width: 100%;
 		height: 100%;
 	}
@@ -39,8 +39,9 @@
 </head>
 <body>
 	<div id="canvasZone">
-		<video id="video" autoplay></video>
 		<canvas id="renderCanvas"></canvas>
+		<video id="video" autoplay></video>
+		
 	</div>
 	<script>
 	
