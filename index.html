@@ -19,7 +19,7 @@
 	
 	#renderCanvas {
 		position: absolute;
-		z-index: 1;
+		z-index: 2;
 		/*left: 0;
 		top: 0;*/
 		width: 100%;
@@ -29,7 +29,7 @@
 	
 	#video {
 		position: absolute;
-		z-index: 2;
+		z-index: 1;
 		/*left: 0;
 		top: 0;*/
 		width: 100%;
@@ -82,7 +82,7 @@
 		
 		// Define a material
 		var material = new BABYLON.StandardMaterial("std", scene);
-		material.diffuseColor = new BABYLON.Color3(0.5, 0, 0.5);
+		material.diffuseColor = new BABYLON.Color4(0.5, 0, 0.5,0.3);
 		
 		// Apply the material
 		box.material = material;
