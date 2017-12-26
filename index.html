@@ -32,7 +32,7 @@
 </head>
 <body>
 	<div id="canvasZone">
-		<video id="video" width="640" height="480" autoplay></video>
+		<video id="video" autoplay></video>
 		<canvas id="renderCanvas"></canvas>
 	</div>
 	<script>
@@ -49,11 +49,11 @@
 	var canvas = document.getElementById("renderCanvas");
 	var engine = new BABYLON.Engine(canvas, true);
 	
-	/*var createScene = function () {
+	var createScene = function () {
 		
 		// Set the scene and background color
 		var scene = new BABYLON.Scene(engine);
-		scene.clearColor = new BABYLON.Color3(0,0,0.2);
+		scene.clearColor = new BABYLON.Color3(0,0,0,0);
 		
 		// Create a camera
 		var camera = new BABYLON.ArcRotateCamera("Camera", 1.0,
@@ -87,7 +87,7 @@
 	
 	engine.runRenderLoop(function () {
 		scene.render();
-	});*/
+	});
 	
 	
 
