@@ -46,10 +46,10 @@
 	<script>
 	
 	var video = document.getElementById("video");
-	var constraints = {video: true};
+	var constraints = {video: facingMode: "environment" }};
 	
 	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+    	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
         video.src = window.URL.createObjectURL(stream);
         video.play();
     });
