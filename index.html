@@ -22,8 +22,8 @@
 		z-index: 999;
 		left: 0;
 		top: 0;
-		width: 100%;
-		height: 100%;
+		width: 640;
+		height: 480;
 		touch-action: none;
 	}
 	
@@ -32,8 +32,8 @@
 		z-index: 1;
 		left: 0;
 		top: 0;
-		width: 100%;
-		height: 100%;
+		width: 640;
+		height: 480;
 	}
 	</style>
 </head>
@@ -52,11 +52,17 @@
     	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
         video.src = window.URL.createObjectURL(stream);
         video.play();
-    });
-}
+	});
+	}
+		
 	var canvas = document.getElementById("renderCanvas");
-	var engine = new BABYLON.Engine(canvas, true);
-	
+	var video_canvas = document.createElement("canvas");
+	video_canvas.width = canvas.width;
+	video_canvas.height = canvas.height;
+        context = video_canvas.getContext("2d");
+	var imageData; 
+		
+	var engine = new BABYLON.Engine(canvas, true);	
 	var createScene = function () {
 		
 		// Set the scene and background color
@@ -92,19 +98,27 @@
 		return scene;
 	};
 	
-	var scene = createScene();
+	//create aruco ardetector, create babylon scene
+	var detector = new AR.Detector(); 		
+	var scene = createScene(); 
 	
-	engine.runRenderLoop(function () {
-		scene.render();
+	// find markers on video, get array width AR.Marker-s {corners, markerIDs}
+	engine.runRenderLoop(function () {  //render loop w/requestAnimFrame
+		snapshot(function{
+			var markers = detector.detect(imageData);
+		
+			//setNewProjectionMatrix
+		
+			return markers;		
+		});
+		scene.render();		
 	});
 	
-	
-	/*
-	var imageData;
-	var detector = new AR.Detector();
-	var markers = detector.detect(imageData);
-	*/
-	
+	function snapshot(processMarkers){
+        	context.drawImage(video, 0, 0, video_canvas.width, video_canvas.height);
+      		imageData = context.getImageData(0, 0, video_canvas.width, video_canvas.height);
+		processMarkers();
+   	}	
 	
 	// Resize
 	window.addEventListener("resize", function () {
