@@ -79,11 +79,11 @@
 		
 		// Create a builtin shape
 		var box = BABYLON.Mesh.CreateBox("mesh", 3, scene);
-		box.showBoundingBox = true;
-		
+				
 		// Define a material
 		var material = new BABYLON.StandardMaterial("std", scene);
 		material.diffuseColor = new BABYLON.Color3(0.5, 0, 0.5);
+		material.alpha = 0.5;
 		
 		// Apply the material
 		box.material = material;
