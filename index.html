@@ -4,9 +4,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	
 	<title>Babylon.js sample code</title>
-	<!-- Babylon.js -->
+	
+	<script src="cv.js"></script>
 	<script src="babylon.custom.js"></script>
-	<script src="aruco.js"></script>
+
 
 	<style>
 	html, body {
@@ -22,8 +23,8 @@
 		z-index: 999;
 		left: 0;
 		top: 0;
-		width: 100%;
-		height: 100%;
+		/*width: 640;
+		height: 480;*/
 		touch-action: none;
 	}
 	
@@ -32,30 +33,41 @@
 		z-index: 1;
 		left: 0;
 		top: 0;
-		width: 100%;
-		height: 100%;
+		/*width: 640;
+		height: 480;*/
 	}
 	</style>
 </head>
 <body>
+	
 	<div id="canvasZone">
-		<canvas id="renderCanvas"></canvas>
-		<video id="video" autoplay></video>
+		<canvas id="renderCanvas" width="320" height="240" ></canvas>
+		<video id="video" src="output_4.ogg" width="320" height="240" autoplay></video>
 		
 	</div>
+	
 	<script>
 	
-	var video = document.getElementById("video");
+	
+	var video = document.getElementById("video"); 
 	var constraints = {video: {facingMode: "environment" }};
 	
-	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+	/*if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {         // <--------------debug: getUserMedia turned off for non interactive mode
     	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
         video.src = window.URL.createObjectURL(stream);
         video.play();
-    });
-}
-	var canvas = document.getElementById("renderCanvas");
-	var engine = new BABYLON.Engine(canvas, true);
+	});
+	}*/ 
+	
+	var canvas = document.getElementById("renderCanvas"); //canvas for rendering 3d
+	var video_canvas = document.createElement("canvas"); //canvas for video capture. Not appended. Same size as "renderCanvas"
+    video_canvas.width = 320;
+	video_canvas.height = 240;
+    var context = video_canvas.getContext("2d");
+	var imageData; 
+	var detector = new AR.Detector();
+	var engine = new BABYLON.Engine(canvas, true);  	
+	
 	
 	var createScene = function () {
 		
@@ -64,8 +76,8 @@
 		scene.clearColor = new BABYLON.Color4(0,0,0,0);
 		
 		// Create a camera
-		var camera = new BABYLON.ArcRotateCamera("Camera", 1.0,
-		1.0, 12, BABYLON.Vector3.Zero(), scene);
+		var camera = new BABYLON.ArcRotateCamera("Camera", 1.0,  // <----------------debug: camera translation v set to 0,0,0
+		1.0, 12.0, BABYLON.Vector3.Zero(), scene);
 		
 		// Attach camera to canvas
 		camera.attachControl(canvas, false);
@@ -92,27 +104,39 @@
 		return scene;
 	};
 	
-	var scene = createScene();
+	var snapshot = function(processMarkers){
+       	context.drawImage(video, 0, 0, video_canvas.width, video_canvas.height);
+    	imageData = context.getImageData(0, 0, video_canvas.width, video_canvas.height);
+		processMarkers();
+   	}	
+
 	
-	engine.runRenderLoop(function () {
-		scene.render();
+	
+	//create aruco ardetector, create babylon scene
+	
+	var scene = createScene(); 	
+	
+	
+	
+	engine.runRenderLoop(function () {  //render loop w/requestAnimFrame
+		snapshot(function() {
+			var markers = detector.detect(imageData);
+		
+			//setNewProjectionMatrix
+		
+			return markers;		
+		});
+		scene.render();		
 	});
 	
-	
-	/*
-	var imageData;
-	var detector = new AR.Detector();
-	var markers = detector.detect(imageData);
-	*/
-	
-	
-	// Resize
+	//Events
 	window.addEventListener("resize", function () {
 		engine.resize();         
 	});
+	
+	
 	</script>
 	
-	<script src="babylon.custom.js"></script>
-	<script src="aruco.js"></script>
+	
 </body>
 </html>
